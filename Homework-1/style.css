@@ -109,7 +109,7 @@ button {
 }
 .header-basket {
   position: absolute;
-  min-width: 400px;
+  min-width: 500px;
   padding: 20px;
   background-color: #fff;
   border-radius: 5px;
@@ -161,6 +161,11 @@ button {
   font-weight: 900;
   color: #2274ee;
   text-align: right;
+}
+.basket-delete-product {
+  margin-left: 20px;
+  padding: 5px 10px;
+  font-size: 10px;
 }
 
 .main {

@@ -141,21 +141,32 @@ window.addEventListener('load', () => {
       this.container = container;
       this.good = good;
       this.total = totalBlock;
+      this.blockGood = document.querySelectorAll('.basket-product');
+      this.removeGoodBtn = document.querySelectorAll('.basket-delete-product');
     }
 
-    // Функция показывает корзину
+    // Метод показывает корзину
     getBasket() {
       productBasket.classList.toggle('header-basket-active');
     }
 
-
-    // Функция добавляет товар в корзину
+    // Метод добавляет товар в корзину
     addItemСart() {
       document.querySelector(this.container).insertAdjacentHTML('beforeend', this.renderProduct());
       this.getTotalSum();
     }
 
-    // Функция получает блок с продуктом
+    // Метод удаляет товар с корзины
+    removeProduct() {
+      this.removeGoodBtn.forEach((btn, index) => {
+        btn.addEventListener('click', (e) => {
+          this.blockGood[index].remove();
+          this.getTotalSum();
+        });
+      });
+    }
+
+    // Метод получает блок с продуктом
     renderProduct() {
       return `<div class="basket-product">
                 <div class="basket-image">
@@ -164,10 +175,11 @@ window.addEventListener('load', () => {
                 <p class="basket-product-title">${this.good.title}</p>
                 <p class="basket-product-quantity">${this.good.quantity}</p>
                 <p class="basket-product-price">${this.good.price}</p>
+                <button class="basket-delete-product">Удалить</button>
               </div>`;
     }
 
-    // Функция считает итоговую сумму
+    // Метод считает итоговую сумму
     getTotalSum() {
       let total = 0;
       let basketPdctPrice = document.querySelectorAll('.basket-product-price');
@@ -178,6 +190,7 @@ window.addEventListener('load', () => {
       return this.total.innerText = total;
     }
   }
+
  
   // При клике на кнопку корзины, показывает корзину
   btnBasket.addEventListener('click', new Basket().getBasket);
@@ -193,53 +206,9 @@ window.addEventListener('load', () => {
         quantity: blockQuantity[index].innerText,
       };
       new Basket('.header-basket-product', productObject).addItemСart();
+      new Basket().removeProduct();
     });
   });
-
-  // ES5 //////////////////////////////////////////////////////////////////////////////////////
-  const goods2 = [
-    {title: 'Телевизор LG', price: 38000, img: 'http://placehold.it/350x300'},
-    {title: 'Iphone 12 PRO', price: 84000, img: 'http://placehold.it/350x300'},
-    {title: 'X-BOX', price: 27000, img: 'http://placehold.it/350x300'},
-    {title: 'Imac', price: 152000, img: 'http://placehold.it/350x300'},
-  ];
-
-  function getProduct(title, price, img) {
-    return `<div class="product-block">
-              <div class="product-block-img">
-                <img src="${img}" alt="${title}">
-              </div>
-              <div class="product-block-content">
-                <h2 class="product-block-title">
-                  ${title}
-                </h2>
-                <p class="product-block-desc">
-                  Этот товар получен с помощью ES5
-                </p>
-                <div class="product-block-quantity">
-                  <p class="product__price">
-                    ${price} <span>&#8381;</span>
-                  </p>
-                  <div class="product-quant">
-                    <button class="item-minus">-</button>
-                    <span>1</span>
-                    <button class="item-plus">+</button>
-                  </div>
-                  <div class="product-add-basket">
-                    <img src="images/shopping-basket.svg" alt="В корзину">
-                  </div>
-                </div>
-              </div>
-            </div>`;
-  }
-
-  function renderProducts(prdct, container) {
-    prdct.map((el) => {
-      document.querySelector(container).insertAdjacentHTML('beforeend', getProduct(el.title, el.price, el.img));
-    });
-  }
-
-  renderProducts(goods2, '.product-wrapper');
 
 
   ////////////////////// Гамбургер ////////////////////////

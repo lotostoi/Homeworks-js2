@@ -1,25 +1,6 @@
 window.addEventListener('load', () => {
 
-  let footerCopyBlock = document.querySelector('.footer-copyright p'); // Блок с выводом текущего года
-  let headBlockClock = document.querySelector('.header-clock'); // Блок с выводом время
-
-  // Добавляет текущий год в разметку
-  footerCopyBlock.insertAdjacentHTML('beforeend', new Date().getFullYear());
-  // Функция выводит время на экран
-  setInterval(function() {
-    const date = new Date();
-    headBlockClock.innerHTML= (`${date.getHours()} : ${date.getMinutes()} : ${date.getSeconds()}`);
-  }, 1000);
-
-
 //  ES6 ///////////////////////////////////////////////////////////////////////////////
-
-  const goods1 = [
-    {title: 'Телевизор Samsung', price: 42000, img: 'http://placehold.it/350x300'},
-    {title: 'Iphone 12', price: 64000, img: 'http://placehold.it/350x300'},
-    {title: 'Sony Playstation', price: 33000, img: 'http://placehold.it/350x300'},
-    {title: 'MacBook Pro', price: 252000, img: 'http://placehold.it/350x300'},
-  ];
 
   /**
    * Получает объект с продуктом и отдает блок с разметкой
@@ -66,27 +47,88 @@ window.addEventListener('load', () => {
    * allGoods - принимает нужный объект товаров
    */
   class ProductsList {
-    constructor(blockProducts, allGoods) {
+    constructor(blockProducts) {
       this.blockProducts = blockProducts;
-      this.allGoods = allGoods;
 
-      // this.receiveGoods();
+      //Переделал класс. Поместил блок с товарами во внутрь
+      this.goods = [
+        {title: 'Телевизор Samsung', price: 42000, img: 'http://placehold.it/350x300'},
+        {title: 'Iphone 12', price: 64000, img: 'http://placehold.it/350x300'},
+        {title: 'Sony Playstation', price: 33000, img: 'http://placehold.it/350x300'},
+        {title: 'MacBook Pro', price: 252000, img: 'http://placehold.it/350x300'},
+      ];
     }
 
+    /**
+   * Функция делает вызов на сервер
+   * @param {string} url 
+   */
+    makeGETRequest(url) {
+      return new Promise((resolve, reject) => {
+        let xhr;
+        if (window.XMLHttpRequest) {
+          xhr = new XMLHttpRequest();
+        } else if (window.ActiveXObject) { 
+          xhr = new ActiveXObject("Microsoft.XMLHTTP");
+        }
+
+        xhr.open('GET', url, true);
+
+        xhr.onreadystatechange = function () {
+          if (xhr.readyState !== 4) return;
+
+          if(xhr.readyState === 4) {
+            resolve(xhr.responseText);
+          }
+          
+          if(xhr.status !== 200) {
+            reject('Error!');
+          }
+        };
+        
+        xhr.send();
+      }); 
+    }
+
+
+    /** TODO
+     * Метод получает товар
+     */
+    fetchGoods(goodsObj) {
+      this.goods.push({goodsObj});
+      console.log(this.goods);
+    }
+
+    /**
+     * Метод отрисовывает товар на странице
+     */
     receiveGoods() {
-      this.allGoods.map((good) => {
+      this.goods.map((good) => {
         let productObject = new Product(good);
         document.querySelector(this.blockProducts).insertAdjacentHTML('beforeend', productObject.render());
       });
     }
   }
 
+  let productApi = 'https://raw.githubusercontent.com/GeekBrainsTutorial/online-store-api/master/responses/catalogData.json';
+
   /** 
    * Запускаем класс ProductsList с параметрами:
    * 1.Блок куда нужно вставить полученную разметку
    * 2.Объект товаров
    */
-  new ProductsList('.product-wrapper', goods1).receiveGoods();
+  new ProductsList('.product-wrapper').receiveGoods();
+  new ProductsList().makeGETRequest(productApi)
+    .then((data) => {
+      let productObject = JSON.parse(data);
+      new ProductsList().fetchGoods(productObject);
+      // console.log(productObject);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+
+
 
   /////////////////////////////// КОРЗИНА ////////////////////////////////////
 

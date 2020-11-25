@@ -2,6 +2,8 @@ window.addEventListener('load', () => {
 
 //  ES6 ///////////////////////////////////////////////////////////////////////////////
 
+  let searchBtn = document.querySelector('.input-search');
+
   /**
    * Получает объект с продуктом и отдает блок с разметкой
    */
@@ -102,10 +104,24 @@ window.addEventListener('load', () => {
     /**
      * Метод отрисовывает товар на странице
      */
-    receiveGoods() {
+    renderGoods() {
       this.goods.map((good) => {
         let productObject = new Product(good);
         document.querySelector(this.blockProducts).insertAdjacentHTML('beforeend', productObject.render());
+      });
+    }
+
+    searchProduct() {
+      searchBtn.addEventListener('change', () => {
+        let regexp = new RegExp(searchBtn.value, 'gi');
+        this.goods.map((good, index) => {
+          let result = regexp.test(good.title);
+          if(result) {
+            return blockProducts[index].style.display = '';
+          } else {
+            blockProducts[index].style.display = 'none';
+          }
+        });
       });
     }
   }
@@ -117,7 +133,8 @@ window.addEventListener('load', () => {
    * 1.Блок куда нужно вставить полученную разметку
    * 2.Объект товаров
    */
-  new ProductsList('.product-wrapper').receiveGoods();
+  new ProductsList('.product-wrapper').renderGoods();
+  new ProductsList().searchProduct();
   new ProductsList().makeGETRequest(productApi)
     .then((data) => {
       let productObject = JSON.parse(data);
@@ -127,7 +144,6 @@ window.addEventListener('load', () => {
     .catch((error) => {
       console.log(error);
     });
-
 
 
   /////////////////////////////// КОРЗИНА ////////////////////////////////////

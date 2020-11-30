@@ -7,206 +7,259 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <header class="header">
-    <div class="container">
-      <div class="header-wrapper">
-        <div class="header-basket">
-          <div class="header-basket-product"></div>
-          <div class="basket-total">Итого: <span></span></div>
-        </div>
-        <div class="header-logo">
-          <img src="http://placehold.it/50x50" alt="Логотип">
-        </div>
-  
-        <div class="header-menu">
-          <ul class="header-ul">
-            <li class="header-li"><a href="#" class="header__link">Каталог</a></li>
-            <li class="header-li"><a href="#" class="header__link">Акции</a></li>
-            <li class="header-li"><a href="#" class="header__link">О нас</a></li>
-            <li class="header-li"><a href="#" class="header__link">Контакты</a></li>
-          </ul>
-        </div>
-
-        <div class="header-search">
-          <form>
-            <input class="input-search" type="text" value="" placeholder="Поиск">
-      </form>
-        </div>
-
-        <button class="basket-btn">
-          Корзина
-        </button>
-      </div>
-    </div>
-  </header>
-
-  <main class="main">
-    <section class="product">
+  <div id="myApp">
+    <header class="header">
       <div class="container">
-        <div class="product-wrapper"></div>
+        <div class="header-wrapper">
+          <div :class="{ headerBasketActive: basketIsActive }" class="header-basket">
+
+            <div class="header-basket-product">
+              <div v-for="item in cartItems" :key="item.id_product" class="basket-product">
+                <div class="basket-image">
+                  <img :src="imgCartProduct" :alt="item.product_name">
+                </div>
+                <p class="basket-product-title">
+                  {{ item.product_name }}
+                </p>
+                <p class="basket-product-quantity">
+                  {{ item.quantity }}
+                </p>
+                <p class="basket-product-price">
+                  {{ item.price }}
+                </p>
+                <button class="basket-delete-product">&times;</button>
+              </div>
+            </div>
+            <p v-if="cartItems.length == 0">Корзина пуста</p>
+            <div v-else class="basket-total">Итого: {{  }}<span></span></div>
+          </div>
+
+          <div class="header-logo">
+            <img src="http://placehold.it/50x50" alt="Логотип">
+          </div>
+    
+          <div class="header-menu">
+            <ul class="header-ul">
+              <li v-for="el of headerLinks" class="header-li"><a href="#" class="header__link">{{ el }}</a></li>
+              <!-- <li class="header-li"><a href="#" class="header__link">Акции</a></li>
+              <li class="header-li"><a href="#" class="header__link">О нас</a></li>
+              <li class="header-li"><a href="#" class="header__link">Контакты</a></li> -->
+            </ul>
+          </div>
+  
+          <div class="header-search">
+            <form v-on:submit.prevent>
+              <input v-model="searchLine" class="input-search" type="text" value="" placeholder="Поиск">
+              <input @click="filter" class="submit-btn" type="submit" value="Go">
+            </form>
+          </div>
+  
+          <button @click="basketIsActive = !basketIsActive" class="basket-btn">
+            Корзина
+          </button>
+        </div>
       </div>
-    </section>
+    </header>
+  
+    <main class="main">
+      <section class="product">
+        <div class="container">
+          <div class="product-wrapper">
 
-    <section class="gamburger">
-      <div class="container">
-        <div class="gamburger-filling-wrapper">
-          <div class="gamburgers">
-            <h2>Собери свой гамбургер</h2>
-          <div class="gamburger-wrapper">
-            <div class="gamburger-block gamb-block">
-              <div class="gamburger-image">
-                <img src="http://placehold.it/200x200" alt="">
+            <div class="product-block" v-for="(good, index) in goods" :key="good.id_product">
+              <div class="product-block-img">
+                <img :src="imgProduct" :alt="good.product_name">
               </div>
-              <h3 class="gamburger-title">
-                Маленький
-              </h3>
-              <p class="gamburger-price"><span>50</span> рублей</p>
-              <p class="gamburger-calory"><span>20</span> калорий</p>
-              <button data-name="gamburger-block" class="gamburger-btn">
-                Выбрать
-              </button>
-            </div>
-            <div class="gamburger-block gamb-block">
-              <div class="gamburger-image">
-                <img src="http://placehold.it/200x200" alt="">
-              </div>
-              <h3 class="gamburger-title">
-                Большой
-              </h3>
-              <p class="gamburger-price"><span>100</span> рублей</p>
-              <p class="gamburger-calory"><span>40</span> калорий</p>
-              <button data-name="gamburger-block" class="gamburger-btn">
-                Выбрать
-              </button>
-            </div>
-          </div>
-          </div>
-          <div class="fillings">
-            <h2>Начинка для гамбургера</h2>
-          <div class="filling-wrapper">
-            <div class="filling-block gamb-block">
-              <div class="filling-image">
-                <img src="http://placehold.it/200x100" alt="">
-              </div>
-              <h3 class="filling-title">
-                С сыром
-              </h3>
-              <p class="gamburger-price filling-price"><span>10</span> рублей</p>
-              <p class="gamburger-calory filling-calory"><span>20</span> калорий</p>
-              <button data-name="filling-block" class="filling-btn">
-                Выбрать
-              </button>
-            </div>
-  
-            <div class="filling-block gamb-block">
-              <div class="filling-image">
-                <img src="http://placehold.it/200x100" alt="">
-              </div>
-              <h3 class="filling-title">
-                С салатом
-              </h3>
-              <p class="gamburger-price filling-price"><span>20</span> рублей</p>
-              <p class="gamburger-calory illing-calory"><span>5</span> калорий</p>
-              <button data-name="filling-block" class="filling-btn">
-                Выбрать
-              </button>
-            </div>
-  
-            <div class="filling-block gamb-block">
-              <div class="filling-image">
-                <img src="http://placehold.it/200x100" alt="">
-              </div>
-              <h3 class="filling-title">
-                С картофелем
-              </h3>
-              <p class="gamburger-price filling-price"><span>15</span> рублей</p>
-              <p class="gamburger-calory filling-calory"><span>10</span> калорий</p>
-              <button data-name="filling-block" class="filling-btn">
-                Выбрать
-              </button>
-            </div>
-          </div>
-
-          <div class="additional-filling">
-            <h2 class="additional-filling-title">
-              Дополнительные приправы
-            </h2>
-            <div class="additional-wrapper">
-              <div class="additional-block gamb-block">
-                <div class="additional-image">
-                  <img src="http://placehold.it/100x150" alt="">
-                </div>
-                <div class="additional-content">
-                  <h4 class="additional-title">
-                    Приправа
-                  </h4>
-                  <p class="gamburger-price additional-price"><span>15</span> рублей</p>
-                  <p class="gamburger-calory additional-calory"><span>0</span> калорий</p>
-                  <button data-name="additional-block" class="additional-btn">
-                    Выбрать
-                  </button>
-                </div>
-              </div>
-  
-              <div class="additional-block gamb-block">
-                <div class="additional-image">
-                  <img src="http://placehold.it/100x150" alt="">
-                </div>
-                <div class="additional-content">
-                  <h4 class="additional-title">
-                    Майонез
-                  </h4>
-                  <p class="gamburger-price additional-price"><span>20</span> рублей</p>
-                  <p class="gamburger-calory additional-calory"><span>5</span> калорий</p>
-                  <button data-name="additional-block" class="additional-btn">
-                    Выбрать
-                  </button>
+              <div class="product-block-content">
+                <h2 class="product-block-title">
+                  {{ good.product_name }}
+                </h2>
+                <p class="product-block-desc">
+                  Lorem ipsum dolor sit amet consectetur adipisicing elit. Similique, at.
+                </p>
+                <div class="product-block-quantity">
+                  <p class="product__price">
+                    {{ good.price }}
+                  </p>
+                  <div class="product-quant">
+                    <button @click="addQuantity(good.quantity, index)" class="item-minus">-</button>
+                    <span>{{ good.quantity }}</span>
+                    <button @click="good.quantity++" class="item-plus">+</button>
+                  </div>
+                  <div @click="addProductCart(good)" class="product-add-basket">
+                    <img src="images/shopping-basket.svg" alt="В корзину">
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
+            
           </div>
         </div>
-
-        <h2 class="total-gamburger">Итоговая сумма: <span></span></h2>
-        <h2 class="total-calory">Количество калорий: <span></span></h2>
-      </div>
-    </section>
-
-    <section class="text">
-      <div class="container text-container">
-        <h2 style="margin-top: 200px;">
-          Регулярные выражения
-        </h2>
-        <p>
-          'Lorem ipsum, dolor si't amet consectetu'r adipisicin'g elit'. 
-          'Sapiente doloremque, mollitia vitae, laudantium eius consectetur fugiat dolores vel, 
-          ipsam quas saepe alia's atque nobis eaque tenetur aperiam labore numquam distincti'o providen't quod'. 
-          'Officiis iure unde sequi a perferendis doloremque saepe rerum quaerat, 
-          sed delectu's sint mollitia porro totam beatae reprehenderit'.
-        </p>
-        <hr>
-      </div>
-    </section>
-  </main>
-
-  <footer class="footer">
-    <div class="container">
-      <div class="footer-wrapper">
-        <div class="header-logo">
-          <img src="http://placehold.it/50x50" alt="Логотип">
+      </section>
+  
+      <!-- <section class="gamburger">
+        <div class="container">
+          <div class="gamburger-filling-wrapper">
+            <div class="gamburgers">
+              <h2>Собери свой гамбургер</h2>
+            <div class="gamburger-wrapper">
+              <div class="gamburger-block gamb-block">
+                <div class="gamburger-image">
+                  <img src="http://placehold.it/200x200" alt="">
+                </div>
+                <h3 class="gamburger-title">
+                  Маленький
+                </h3>
+                <p class="gamburger-price"><span>50</span> рублей</p>
+                <p class="gamburger-calory"><span>20</span> калорий</p>
+                <button data-name="gamburger-block" class="gamburger-btn">
+                  Выбрать
+                </button>
+              </div>
+              <div class="gamburger-block gamb-block">
+                <div class="gamburger-image">
+                  <img src="http://placehold.it/200x200" alt="">
+                </div>
+                <h3 class="gamburger-title">
+                  Большой
+                </h3>
+                <p class="gamburger-price"><span>100</span> рублей</p>
+                <p class="gamburger-calory"><span>40</span> калорий</p>
+                <button data-name="gamburger-block" class="gamburger-btn">
+                  Выбрать
+                </button>
+              </div>
+            </div>
+            </div>
+            <div class="fillings">
+              <h2>Начинка для гамбургера</h2>
+            <div class="filling-wrapper">
+              <div class="filling-block gamb-block">
+                <div class="filling-image">
+                  <img src="http://placehold.it/200x100" alt="">
+                </div>
+                <h3 class="filling-title">
+                  С сыром
+                </h3>
+                <p class="gamburger-price filling-price"><span>10</span> рублей</p>
+                <p class="gamburger-calory filling-calory"><span>20</span> калорий</p>
+                <button data-name="filling-block" class="filling-btn">
+                  Выбрать
+                </button>
+              </div>
+    
+              <div class="filling-block gamb-block">
+                <div class="filling-image">
+                  <img src="http://placehold.it/200x100" alt="">
+                </div>
+                <h3 class="filling-title">
+                  С салатом
+                </h3>
+                <p class="gamburger-price filling-price"><span>20</span> рублей</p>
+                <p class="gamburger-calory illing-calory"><span>5</span> калорий</p>
+                <button data-name="filling-block" class="filling-btn">
+                  Выбрать
+                </button>
+              </div>
+    
+              <div class="filling-block gamb-block">
+                <div class="filling-image">
+                  <img src="http://placehold.it/200x100" alt="">
+                </div>
+                <h3 class="filling-title">
+                  С картофелем
+                </h3>
+                <p class="gamburger-price filling-price"><span>15</span> рублей</p>
+                <p class="gamburger-calory filling-calory"><span>10</span> калорий</p>
+                <button data-name="filling-block" class="filling-btn">
+                  Выбрать
+                </button>
+              </div>
+            </div>
+  
+            <div class="additional-filling">
+              <h2 class="additional-filling-title">
+                Дополнительные приправы
+              </h2>
+              <div class="additional-wrapper">
+                <div class="additional-block gamb-block">
+                  <div class="additional-image">
+                    <img src="http://placehold.it/100x150" alt="">
+                  </div>
+                  <div class="additional-content">
+                    <h4 class="additional-title">
+                      Приправа
+                    </h4>
+                    <p class="gamburger-price additional-price"><span>15</span> рублей</p>
+                    <p class="gamburger-calory additional-calory"><span>0</span> калорий</p>
+                    <button data-name="additional-block" class="additional-btn">
+                      Выбрать
+                    </button>
+                  </div>
+                </div>
+    
+                <div class="additional-block gamb-block">
+                  <div class="additional-image">
+                    <img src="http://placehold.it/100x150" alt="">
+                  </div>
+                  <div class="additional-content">
+                    <h4 class="additional-title">
+                      Майонез
+                    </h4>
+                    <p class="gamburger-price additional-price"><span>20</span> рублей</p>
+                    <p class="gamburger-calory additional-calory"><span>5</span> калорий</p>
+                    <button data-name="additional-block" class="additional-btn">
+                      Выбрать
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            </div>
+          </div>
+  
+          <h2 class="total-gamburger">Итоговая сумма: <span></span></h2>
+          <h2 class="total-calory">Количество калорий: <span></span></h2>
         </div>
-        <div class="footer-copyright">
+      </section> -->
+  
+      <!-- <section class="text">
+        <div class="container text-container">
+          <h2 style="margin-top: 200px;">
+            Регулярные выражения
+          </h2>
           <p>
-            Все права защищены &#169; 
+            'Lorem ipsum, dolor si't amet consectetu'r adipisicin'g elit'. 
+            'Sapiente doloremque, mollitia vitae, laudantium eius consectetur fugiat dolores vel, 
+            ipsam quas saepe alia's atque nobis eaque tenetur aperiam labore numquam distincti'o providen't quod'. 
+            'Officiis iure unde sequi a perferendis doloremque saepe rerum quaerat, 
+            sed delectu's sint mollitia porro totam beatae reprehenderit'.
           </p>
+          <hr>
+        </div>
+      </section> -->
+    </main>
+  
+    <footer class="footer">
+      <div class="container">
+        <div class="footer-wrapper">
+          <div class="header-logo">
+            <img src="http://placehold.it/50x50" alt="Логотип">
+          </div>
+          <div class="footer-copyright">
+            <p>
+              Все права защищены &#169; 
+            </p>
+          </div>
         </div>
       </div>
-    </div>
-  </footer>
+    </footer>
+  </div>
   
-  <script src="app.js"></script>
+  <!-- <script src="app.js"></script>
   <script src="lesson-3.js"></script>
-  <script src="lesson-4.js"></script>
+  <script src="lesson-4.js"></script> -->
+  <script src="vue.js"></script>
+  <script src="myScriptVue.js"></script>
 </body>
 </html>

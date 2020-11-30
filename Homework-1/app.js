@@ -112,7 +112,10 @@ window.addEventListener('load', () => {
     }
 
     searchProduct() {
-      searchBtn.addEventListener('change', () => {
+      searchBtn.form.addEventListener('submit', (e) => {
+        e.preventDefault();
+      });
+      searchBtn.addEventListener('change', (e) => {
         let regexp = new RegExp(searchBtn.value, 'gi');
         this.goods.map((good, index) => {
           let result = regexp.test(good.title);

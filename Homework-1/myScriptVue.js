@@ -41,19 +41,26 @@ const app = new Vue({
     addProductCart(product) {
       let findElem = this.cartItems.find(elem => elem.id_product === product.id_product);
       if(findElem) {
-        product.quantity++;
+        findElem.quantity++;
       } else {
-        let cartGood = Object.assign(product);
+        let cartGood = {...product};
         this.cartItems.push(cartGood);
       }
     },
     // Метод фильтрует товар, когда пользователь ищет необходимый товар
-    filter() {
-      
+    filter(value) {
+      let regexp = new RegExp(value, 'gi');
+      this.filteredGoods = this.goods.filter(name => regexp.test(name.product_name));
     },
+    
+  },
+
+  computed: {
     // Метод считает общую сумму товаров в корзине
     getTotalSum() {
-      
+      return this.cartItems.reduce((val, elem) => {
+        return val + elem.quantity * elem.price;
+      }, 0);
     },
   },
 
@@ -64,6 +71,7 @@ const app = new Vue({
             let prod = Object.assign({quantity: 1}, el);
             this.goods.push(prod);
           }
+          this.filteredGoods = this.goods;
         });
   },
 });

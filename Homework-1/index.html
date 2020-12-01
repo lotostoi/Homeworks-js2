@@ -31,7 +31,7 @@
               </div>
             </div>
             <p v-if="cartItems.length == 0">Корзина пуста</p>
-            <div v-else class="basket-total">Итого: {{  }}<span></span></div>
+            <div v-else class="basket-total">Итого: {{ getTotalSum }}<span></span></div>
           </div>
 
           <div class="header-logo">
@@ -48,9 +48,9 @@
           </div>
   
           <div class="header-search">
-            <form v-on:submit.prevent>
+            <form>
               <input v-model="searchLine" class="input-search" type="text" value="" placeholder="Поиск">
-              <input @click="filter" class="submit-btn" type="submit" value="Go">
+              <input @click.prevent="filter(searchLine)" class="submit-btn" type="submit" value="Go">
             </form>
           </div>
   
@@ -66,7 +66,7 @@
         <div class="container">
           <div class="product-wrapper">
 
-            <div class="product-block" v-for="(good, index) in goods" :key="good.id_product">
+            <div class="product-block" v-for="(good, index) in filteredGoods" :key="good.id_product">
               <div class="product-block-img">
                 <img :src="imgProduct" :alt="good.product_name">
               </div>

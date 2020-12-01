@@ -47,6 +47,14 @@ const app = new Vue({
         this.cartItems.push(cartGood);
       }
     },
+    // Метод удаляет товар из корзины
+    remove(product) {
+      if(product.quantity > 1) {
+        product.quantity--;
+      } else {
+        this.cartItems.splice(product);
+      }
+    },
     // Метод фильтрует товар, когда пользователь ищет необходимый товар
     filter(value) {
       let regexp = new RegExp(value, 'gi');

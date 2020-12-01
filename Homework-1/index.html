@@ -27,7 +27,7 @@
                 <p class="basket-product-price">
                   {{ item.price }}
                 </p>
-                <button class="basket-delete-product">&times;</button>
+                <button @click="remove(item)" class="basket-delete-product">&times;</button>
               </div>
             </div>
             <p v-if="cartItems.length == 0">Корзина пуста</p>

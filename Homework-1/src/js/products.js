@@ -21,6 +21,17 @@ const CompProducts = {
   components: {
     CompProduct,
   },
+  methods: {
+    filter(value) {
+     
+       if (value !== '') {
+        let regEXP = new RegExp(value, 'ig') 
+        this.filteredGoods = this.goods.filter(g=>regEXP.test(g.product_name))
+      } else {
+        this.filteredGoods = this.goods
+      }    
+    }
+  },
 
   mounted() {
     this.$root.getJson(`${productApi + this.catalogs}`).then((data) => {
